@@ -145,7 +145,7 @@ sub shuffle_array {
 	my $self = shift;
 	my @copy = @_;
 	for my $i (reverse 1 .. $#copy) {
-		my $j = $self->next_u64 % ($i + 1);
+		my $j = $self->rand_integer(0, $i);
 		@copy[$i, $j] = @copy[$j, $i];
 	}
 	return @copy;
