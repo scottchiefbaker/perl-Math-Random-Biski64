@@ -141,6 +141,16 @@ sub rand_integer {
 	return $min + ($val % $range);
 }
 
+sub shuffle_array {
+	my $self = shift;
+	my @copy = @_;
+	for my $i (reverse 1 .. $#copy) {
+		my $j = $self->next_u64 % ($i + 1);
+		@copy[$i, $j] = @copy[$j, $i];
+	}
+	return @copy;
+}
+
 sub _warmup {
 	my ($self) = @_;
 	$self->next_u64 for 1 .. 16;
@@ -268,6 +278,14 @@ C<$max>. Uses rejection sampling to eliminate modulo bias: if the raw
 it is rejected and a new value is drawn.
 
 Returns C<$min> unchanged if C<$min> E<gt>= C<$max>.
+
+=head2 shuffle_array(@array)
+
+Returns a new array containing the same elements as C<@array> but randomly
+shuffled using the Fisher-Yates algorithm. The original array is not modified.
+
+  my @cards  = 1..52;
+  my @shuffled = $rng->shuffle_array(@cards);
 
 =head1 ALGORITHM
 

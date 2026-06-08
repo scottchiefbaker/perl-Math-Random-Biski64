@@ -50,7 +50,7 @@ Returns the next 32-bit random integer (upper 32 bits of the next\_u64 output).
 
 Returns a random double in \[0, 1).
 
-### Rand\_Integer($Min, $Max)
+### rand\_integer($min, $max)
 
 Returns an unbiased random integer in the inclusive range `$min` to
 `$max`. Uses rejection sampling to eliminate modulo bias: if the raw
@@ -58,6 +58,16 @@ Returns an unbiased random integer in the inclusive range `$min` to
 it is rejected and a new value is drawn.
 
 Returns `$min` unchanged if `$min` >= `$max`.
+
+### shuffle\_array(@array)
+
+Returns a new array containing the same elements as `@array` but randomly
+shuffled using the Fisher-Yates algorithm. The original array is not modified.
+
+```perl
+my @cards  = 1..52;
+my @shuffled = $rng->shuffle_array(@cards);
+```
 
 ## Algorithm
 

@@ -26,10 +26,10 @@ is $rng->next_u64, $expected[3], 'output 4 matches reference';
 is $rng->next_u64, $expected[4], 'output 5 matches reference';
 
 # Determinism: same seed → same sequence
-my $a = Math::Random::Biski64->new(42);
-my $b = Math::Random::Biski64->new(42);
-is $a->next_u64, $b->next_u64, 'deterministic across instances';
-is $a->next_u64, $b->next_u64, 'deterministic continues';
+my $rng_a = Math::Random::Biski64->new(42);
+my $rng_b = Math::Random::Biski64->new(42);
+is $rng_a->next_u64, $rng_b->next_u64, 'deterministic across instances';
+is $rng_a->next_u64, $rng_b->next_u64, 'deterministic continues';
 
 # Re-seeding
 $rng->seed(99);
@@ -88,5 +88,28 @@ is $ria->rand_integer(0, 100), $rib->rand_integer(0, 100), 'rand_integer determi
 # rand_integer large range
 $n = $ri->rand_integer(0, 1000000);
 ok $n >= 0 && $n <= 1000000, 'rand_integer(0, 1000000) in range';
+
+# shuffle_array returns all original elements
+my @original = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+my $rs = Math::Random::Biski64->new(999);
+my @shuffled = $rs->shuffle_array(@original);
+is scalar(@shuffled), scalar(@original), 'shuffle_array preserves length';
+my @sorted = sort { $a <=> $b } @shuffled;
+is_deeply \@sorted, \@original, 'shuffle_array preserves elements';
+
+# shuffle_array deterministic
+my $rsa = Math::Random::Biski64->new(42);
+my $rsb = Math::Random::Biski64->new(42);
+my @a = $rsa->shuffle_array(1..20);
+my @b = $rsb->shuffle_array(1..20);
+is_deeply \@a, \@b, 'shuffle_array deterministic';
+
+# shuffle_array single element
+my @single = $rs->shuffle_array(42);
+is_deeply \@single, [42], 'shuffle_array single element';
+
+# shuffle_array empty list
+my @empty = $rs->shuffle_array();
+is_deeply \@empty, [], 'shuffle_array empty list';
 
 done_testing();
