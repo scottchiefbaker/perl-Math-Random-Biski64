@@ -131,6 +131,16 @@ sub next_double {
 	($self->next_u64 >> 11) / 9007199254740992.0;
 }
 
+sub rand_integer {
+	my ($self, $min, $max) = @_;
+	my $range = $max - $min + 1;
+	return $min if $range <= 1;
+	my $limit = MASK64 - (MASK64 % $range + 1) % $range;
+	my $val;
+	do { $val = $self->next_u64 } while $val > $limit;
+	return $min + ($val % $range);
+}
+
 sub _warmup {
 	my ($self) = @_;
 	$self->next_u64 for 1 .. 16;
@@ -249,6 +259,15 @@ Returns the next 32-bit random integer (upper 32 bits of the next_u64 output).
 =head2 next_double
 
 Returns a random double in [0, 1).
+
+=head2 rand_integer($min, $max)
+
+Returns an unbiased random integer in the inclusive range C<$min> to
+C<$max>. Uses rejection sampling to eliminate modulo bias: if the raw
+64-bit value exceeds the largest multiple of the range that fits in 2^64,
+it is rejected and a new value is drawn.
+
+Returns C<$min> unchanged if C<$min> E<gt>= C<$max>.
 
 =head1 ALGORITHM
 

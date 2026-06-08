@@ -50,6 +50,15 @@ Returns the next 32-bit random integer (upper 32 bits of the next\_u64 output).
 
 Returns a random double in \[0, 1).
 
+### Rand\_Integer($Min, $Max)
+
+Returns an unbiased random integer in the inclusive range `$min` to
+`$max`. Uses rejection sampling to eliminate modulo bias: if the raw
+64-bit value exceeds the largest multiple of the range that fits in 2^64,
+it is rejected and a new value is drawn.
+
+Returns `$min` unchanged if `$min` >= `$max`.
+
 ## Algorithm
 
 The Biski64 state consists of three 64-bit integers: `fast_loop`, `mix`,

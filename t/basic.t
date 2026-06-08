@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More;
 
 BEGIN { use_ok 'Math::Random::Biski64' }
 
@@ -68,3 +68,25 @@ cmp_ok $s0a->next_u64, '!=', $s2->next_u64, 'stream 0 ≠ stream 2';
 # os_random_u64 returns non-zero
 my $os = Math::Random::Biski64::os_random_u64();
 ok $os > 0, 'os_random_u64 returns non-zero';
+
+# rand_integer range
+my $ri = Math::Random::Biski64->new(555);
+my $n = $ri->rand_integer(1, 6);
+ok $n >= 1 && $n <= 6, 'rand_integer(1,6) in range';
+
+# rand_integer single value
+is $ri->rand_integer(5, 5), 5, 'rand_integer(5,5) returns 5';
+
+# rand_integer swapped range
+is $ri->rand_integer(10, 3), 10, 'rand_integer(10,3) returns min';
+
+# rand_integer deterministic
+my $ria = Math::Random::Biski64->new(42);
+my $rib = Math::Random::Biski64->new(42);
+is $ria->rand_integer(0, 100), $rib->rand_integer(0, 100), 'rand_integer deterministic';
+
+# rand_integer large range
+$n = $ri->rand_integer(0, 1000000);
+ok $n >= 0 && $n <= 1000000, 'rand_integer(0, 1000000) in range';
+
+done_testing();
