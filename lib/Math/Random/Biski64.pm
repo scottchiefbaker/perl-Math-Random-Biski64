@@ -5,10 +5,11 @@ use warnings;
 use v5.12;
 no warnings 'portable';
 
+our $VERSION = 'v0.1.1';
+
 use Carp qw(croak);
 use constant MASK64 => 0xFFFFFFFFFFFFFFFF;
 my $URANDOM_FH = undef;
-our $DEFAULT_RNG;
 
 sub _rotl64 {
 	my ($x, $k) = @_;
@@ -50,10 +51,6 @@ sub new {
 		$self->seed(os_random_u64());
 	}
 	$self;
-}
-
-sub default {
-	$DEFAULT_RNG;
 }
 
 sub os_random_u64 {
@@ -199,8 +196,6 @@ sub os_random_bytes {
 	return $ret;
 }
 
-$DEFAULT_RNG = __PACKAGE__->new();
-
 1;
 
 __END__
@@ -214,15 +209,12 @@ Math::Random::Biski64 - Fast 64-bit PRNG with guaranteed minimum 2^64 period
   use Math::Random::Biski64;
 
   # Use the auto-seeded default generator
-  my $rng = Math::Random::Biski64->default;
-  my $u64 = $rng->next_u64;
+  my $rng1 = Math::Random::Biski64->new();
+  my $num  = $rng->next_u64;
 
-  # Or create your own with a specific seed
+  # Or create your own with a specific 64bit seed
   my $rng2 = Math::Random::Biski64->new(12345);
-  my $u32 = $rng2->next_u32;
-
-  # Or auto-seed from /dev/urandom
-  my $rng3 = Math::Random::Biski64->new;
+  my $num  = $rng2->next_u32;
 
 =head1 DESCRIPTION
 
@@ -241,11 +233,6 @@ random source (C</dev/urandom> on Unix, C<RtlGenRandom> on Windows).
 Create a new generator. If C<$seed> is provided, the generator is seeded via
 C<seed>. Otherwise, the generator is seeded from the OS random source.
 
-=head2 default
-
-Returns the module-wide default generator, auto-seeded from the OS random
-source at module load time.
-
 =head2 seed($seed)
 
 Initialize the generator from a 64-bit seed using SplitMix64 to expand the
@@ -261,31 +248,16 @@ Returns the next 32-bit random integer (upper 32 bits of the next_u64 output).
 
 =head2 next_double
 
-Returns a random double in [0, 1) by dividing next_u64 by 2^64.
-
-=head2 for_stream($seed, $stream_index, $total_streams)
-
-Creates a generator for use in a parallel stream setup. C<$seed> is the base
-seed for all streams. C<$stream_index> is the index of this stream (0-based).
-C<$total_streams> is the total number of streams.
-
-=head2 os_random_bytes($count)
-
-Returns C<$count> cryptographically-secure random bytes from the operating
-system (C</dev/urandom> or C<RtlGenRandom>).
-
-=head2 os_random_u64
-
-Returns a 64-bit unsigned integer from the OS random source.
+Returns a random double in [0, 1).
 
 =head1 ALGORITHM
 
 The Biski64 state consists of three 64-bit integers: C<fast_loop>, C<mix>,
 and C<loop_mix>. On each call:
 
-  output = mix + loop_mix
-  loop_mix = fast_loop ^ mix
-  mix = rotl(mix, 16) + rotl(loop_mix, 40)
+  output     = mix + loop_mix
+  loop_mix   = fast_loop ^ mix
+  mix        = rotl(mix, 16) + rotl(loop_mix, 40)
   fast_loop += 0x9999999999999999
 
 =head1 SEE ALSO
