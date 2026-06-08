@@ -1,0 +1,6 @@
+example.pl
+lib/Math/Random/Biski64.pm
+Makefile.PL
+README.md
+t/basic.t
+MANIFEST
