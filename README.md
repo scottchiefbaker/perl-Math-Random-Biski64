@@ -9,11 +9,11 @@ use Math::Random::Biski64;
 
 # Local copy of the random number generator to play with
 my $rng = Math::Random::Biski64->new();
-my $num  = $rng->next_u64;
+my $num = $rng->next_u64();
 
 # Or create one with a specific 64bit seed
 my $rng2 = Math::Random::Biski64->new(12345);
-my $num  = $rng2->next_u64;
+my $num  = $rng2->next_u64();
 ```
 
 ## Description
@@ -38,19 +38,19 @@ Create a new generator. If `$seed` is provided, the generator is seeded via
 Initialize the generator from a 64-bit seed using SplitMix64 to expand the
 seed into the full internal state, followed by a 16-iteration warm-up.
 
-### next\_u64
+### next_u64()
 
 Returns the next 64-bit random integer.
 
-### next\_u32
+### next_u32()
 
 Returns the next 32-bit random integer (upper 32 bits of the next\_u64 output).
 
-### next\_double
+### next_double()
 
 Returns a random double in \[0, 1).
 
-### rand\_integer($min, $max)
+### rand_integer($min, $max)
 
 Returns an unbiased random integer in the inclusive range `$min` to
 `$max`. Uses rejection sampling to eliminate modulo bias: if the raw
@@ -59,7 +59,7 @@ it is rejected and a new value is drawn.
 
 Returns `$min` unchanged if `$min` >= `$max`.
 
-### shuffle\_array(@array)
+### shuffle_array(@srray)
 
 Returns a new array containing the same elements as `@array` but randomly
 shuffled using the Fisher-Yates algorithm. The original array is not modified.

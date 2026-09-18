@@ -230,11 +230,11 @@ Math::Random::Biski64 - Fast 64-bit PRNG with guaranteed minimum 2^64 period
 
   # Local copy of the random number generator to play with
   my $rng = Math::Random::Biski64->new();
-  my $num  = $rng->next_u64;
+  my $num = $rng->next_u64();
 
   # Or create one with a specific 64bit seed
   my $rng2 = Math::Random::Biski64->new(12345);
-  my $num  = $rng2->next_u64;
+  my $num  = $rng2->next_u64();
 
 =head1 DESCRIPTION
 
@@ -258,15 +258,15 @@ C<seed>. Otherwise, the generator is seeded from the OS random source.
 Initialize the generator from a 64-bit seed using SplitMix64 to expand the
 seed into the full internal state, followed by a 16-iteration warm-up.
 
-=head2 next_u64
+=head2 next_u64()
 
 Returns the next 64-bit random integer.
 
-=head2 next_u32
+=head2 next_u32()
 
 Returns the next 32-bit random integer (upper 32 bits of the next_u64 output).
 
-=head2 next_double
+=head2 next_double()
 
 Returns a random double in [0, 1).
 
