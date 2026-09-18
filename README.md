@@ -59,7 +59,7 @@ it is rejected and a new value is drawn.
 
 Returns `$min` unchanged if `$min` >= `$max`.
 
-### shuffle_array(@srray)
+### shuffle_array(@array)
 
 Returns a new array containing the same elements as `@array` but randomly
 shuffled using the Fisher-Yates algorithm. The original array is not modified.
@@ -67,6 +67,15 @@ shuffled using the Fisher-Yates algorithm. The original array is not modified.
 ```perl
 my @cards  = 1..52;
 my @shuffled = $rng->shuffle_array(@cards);
+```
+
+### random_elem(@array)
+
+Returns a randomly selected element from `@array`, or `undef` if the array is empty.
+
+```perl
+my @colors = qw(red green blue);
+my $color  = $rng->random_elem(@colors);
 ```
 
 ## Algorithm

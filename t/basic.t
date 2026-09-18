@@ -112,4 +112,30 @@ is_deeply \@single, [42], 'shuffle_array single element';
 my @empty = $rs->shuffle_array();
 is_deeply \@empty, [], 'shuffle_array empty list';
 
+# random_elem membership
+my $re = Math::Random::Biski64->new(1234);
+my @elems = (10 .. 50);
+for (1 .. 10) {
+	my $pick = $re->random_elem(@elems);
+	ok $pick >= 10 && $pick <= 50, 'random_elem member of list';
+}
+
+# random_elem single element
+is $re->random_elem('only'), 'only', 'random_elem single element';
+
+# random_elem deterministic
+my $rea = Math::Random::Biski64->new(42);
+my $reb = Math::Random::Biski64->new(42);
+is $rea->random_elem('a' .. 'z'), $reb->random_elem('a' .. 'z'), 'random_elem deterministic';
+
+# random_elem distribution sanity (loose)
+my $rex = Math::Random::Biski64->new(777);
+my %seen;
+$seen{ $rex->random_elem('x', 'y') }++ for 1 .. 200;
+ok $seen{x} > 0,  'random_elem covers x';
+ok $seen{y} > 0,  'random_elem covers y';
+
+# random_elem empty list returns undef
+is $re->random_elem(), undef, 'random_elem empty returns undef';
+
 done_testing();

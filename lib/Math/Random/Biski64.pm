@@ -151,6 +151,20 @@ sub shuffle_array {
 	return @copy;
 }
 
+sub random_elem {
+	my $self = shift;
+
+	if (!@_) {
+		return undef;
+	}
+
+	my $size = scalar(@_) - 1;
+	my $id   = $self->rand_integer(0, $size);
+	my $ret  = $_[$id];
+
+	return $ret;
+}
+
 sub _warmup {
 	my ($self) = @_;
 	$self->next_u64 for 1 .. 16;
@@ -286,6 +300,14 @@ shuffled using the Fisher-Yates algorithm. The original array is not modified.
 
   my @cards  = 1..52;
   my @shuffled = $rng->shuffle_array(@cards);
+
+=head2 random_elem(@array)
+
+Returns a randomly selected element from C<@array>, chosen with an
+unbiased uniform distribution. Returns undef if C<@array> is empty.
+
+  my @colors = qw(red green blue);
+  my $color  = $rng->random_elem(@colors);
 
 =head1 ALGORITHM
 
