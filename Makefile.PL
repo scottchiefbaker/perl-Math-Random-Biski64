@@ -24,9 +24,15 @@ WriteMakefile(
     META_MERGE          => {
         'meta-spec' => { version => 2 },
         resources   => {
-            #repository => 'https://github.com/danielcota/biski64',
-            #bugtracker => 'https://github.com/danielcota/biski64/issues',
-            #homepage   => 'https://github.com/danielcota/biski64',
+            repository => {
+                web  => 'https://github.com/bakers/perl-Math-Random-Biski64',
+                url  => 'https://github.com/bakers/perl-Math-Random-Biski64.git',
+                type => 'git',
+            },
+            bugtracker => {
+                web => 'https://github.com/bakers/perl-Math-Random-Biski64/issues',
+            },
+            homepage   => 'https://github.com/bakers/perl-Math-Random-Biski64',
         },
         optional_features => {
             'Windows' => {

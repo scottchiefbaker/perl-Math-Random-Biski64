@@ -5,7 +5,7 @@ use warnings;
 use v5.12;
 no warnings 'portable';
 
-our $VERSION = 'v0.1.1';
+our $VERSION = 'v0.2.0';
 
 use Carp qw(croak);
 use constant MASK64 => 0xFFFFFFFFFFFFFFFF;
@@ -228,13 +228,13 @@ Math::Random::Biski64 - Fast 64-bit PRNG with guaranteed minimum 2^64 period
 
   use Math::Random::Biski64;
 
-  # Use the auto-seeded default generator
-  my $rng1 = Math::Random::Biski64->new();
+  # Local copy of the random number generator to play with
+  my $rng = Math::Random::Biski64->new();
   my $num  = $rng->next_u64;
 
-  # Or create your own with a specific 64bit seed
+  # Or create one with a specific 64bit seed
   my $rng2 = Math::Random::Biski64->new(12345);
-  my $num  = $rng2->next_u32;
+  my $num  = $rng2->next_u64;
 
 =head1 DESCRIPTION
 
